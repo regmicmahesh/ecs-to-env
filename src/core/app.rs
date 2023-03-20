@@ -3,7 +3,7 @@ use std::io::prelude::*;
 
 use super::config::Config;
 
-use std::io::{BufWriter, Error};
+use std::io::{BufWriter, Result};
 
 use super::model::EnvVariable;
 
@@ -20,7 +20,7 @@ impl<'a> App<'a> {
         }
     }
 
-    fn load(&mut self, reader: &mut dyn std::io::Read) -> Result<(), Error> {
+    fn load<T: std::io::Read>(&mut self, reader: &mut T) -> Result<()> {
         let mut contents = String::new();
         reader.read_to_string(&mut contents)?;
         self.contents = serde_json::from_str(&contents).unwrap();
@@ -28,7 +28,7 @@ impl<'a> App<'a> {
         Ok(())
     }
 
-    pub fn run(&mut self) -> Result<(), Error> {
+    pub fn run(&mut self) -> Result<()> {
         let mut file = fs::File::open(&self.config.filename)?;
         self.load(&mut file).unwrap();
         self.write(&mut std::io::stdout())?;
@@ -36,7 +36,7 @@ impl<'a> App<'a> {
         Ok(())
     }
 
-    fn write(&self, writer: &mut dyn std::io::Write) -> Result<(), Error> {
+    fn write<T: std::io::Write>(&self, writer: &mut T) -> Result<()> {
         let mut writer = BufWriter::new(writer);
 
         for env_variable in &self.contents {
