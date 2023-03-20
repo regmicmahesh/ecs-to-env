@@ -1,7 +1,5 @@
-pub mod config;
 pub mod core;
 
-use config::Config;
 
 use std::env;
 
@@ -15,7 +13,7 @@ fn main() {
 
     let filename = &args[1];
 
-    let config = &Config::new(filename);
+    let config = &core::config::Config::new(filename);
 
     let mut app = core::app::App::new(config);
 

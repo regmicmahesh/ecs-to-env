@@ -1,7 +1,7 @@
-use super::Config;
-use serde_json::Value;
 use std::fs;
 use std::io::prelude::*;
+
+use super::config::Config;
 
 use std::io::{BufWriter, Error};
 
